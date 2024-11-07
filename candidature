@@ -1,0 +1,297 @@
+import React, { useState } from 'react'
+import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { Textarea } from "@/components/ui/textarea"
+import { Checkbox } from "@/components/ui/checkbox"
+import { useToast } from "@/components/ui/use-toast"
+
+export default function FormulaireCandidatureAgentSecurite() {
+  const { toast } = useToast()
+  const [formData, setFormData] = useState({
+    prenom: '',
+    nom: '',
+    email: '',
+    telephone: '',
+    adresse: '',
+    ville: '',
+    codePostal: '',
+    dateNaissance: '',
+    citoyennete: '',
+    permisConduire: '',
+    permisAgentSecurite: '',
+    certificatPremiersSoins: '',
+    disponibilite: '',
+    experience: '',
+    education: '',
+    commentEntenduParler: '',
+    accepterConditions: false,
+  })
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target
+    setFormData(prevState => ({
+      ...prevState,
+      [name]: value
+    }))
+  }
+
+  const handleCheckboxChange = (e) => {
+    const { name, checked } = e.target
+    setFormData(prevState => ({
+      ...prevState,
+      [name]: checked
+    }))
+  }
+
+  const handleSubmit = async (e) => {
+    e.preventDefault()
+    try {
+      const response = await fetch('/api/submit-application', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      })
+
+      if (response.ok) {
+        toast({
+          title: "Candidature soumise",
+          description: "Votre candidature a été enregistrée avec succès.",
+        })
+        // Reset form after successful submission
+        setFormData({
+          prenom: '',
+          nom: '',
+          email: '',
+          telephone: '',
+          adresse: '',
+          ville: '',
+          codePostal: '',
+          dateNaissance: '',
+          citoyennete: '',
+          permisConduire: '',
+          permisAgentSecurite: '',
+          certificatPremiersSoins: '',
+          disponibilite: '',
+          experience: '',
+          education: '',
+          commentEntenduParler: '',
+          accepterConditions: false,
+        })
+      } else {
+        throw new Error('Erreur lors de la soumission')
+      }
+    } catch (error) {
+      toast({
+        title: "Erreur",
+        description: "Une erreur est survenue lors de la soumission de votre candidature. Veuillez réessayer.",
+        variant: "destructive",
+      })
+    }
+  }
+
+  return (
+    <form onSubmit={handleSubmit} className="space-y-6 p-4">
+      <h1 className="text-2xl font-bold text-center mb-6">Candidature d'Agent de Sécurité</h1>
+      
+      <div className="space-y-2">
+        <Label htmlFor="prenom">Prénom</Label>
+        <Input
+          id="prenom"
+          name="prenom"
+          value={formData.prenom}
+          onChange={handleInputChange}
+          required
+        />
+      </div>
+
+      <div className="space-y-2">
+        <Label htmlFor="nom">Nom</Label>
+        <Input
+          id="nom"
+          name="nom"
+          value={formData.nom}
+          onChange={handleInputChange}
+          required
+        />
+      </div>
+
+      <div className="space-y-2">
+        <Label htmlFor="email">Courriel</Label>
+        <Input
+          id="email"
+          name="email"
+          type="email"
+          value={formData.email}
+          onChange={handleInputChange}
+          required
+        />
+      </div>
+
+      <div className="space-y-2">
+        <Label htmlFor="telephone">Téléphone</Label>
+        <Input
+          id="telephone"
+          name="telephone"
+          type="tel"
+          value={formData.telephone}
+          onChange={handleInputChange}
+          required
+        />
+      </div>
+
+      <div className="space-y-2">
+        <Label htmlFor="adresse">Adresse</Label>
+        <Input
+          id="adresse"
+          name="adresse"
+          value={formData.adresse}
+          onChange={handleInputChange}
+          required
+        />
+      </div>
+
+      <div className="space-y-2">
+        <Label htmlFor="ville">Ville</Label>
+        <Input
+          id="ville"
+          name="ville"
+          value={formData.ville}
+          onChange={handleInputChange}
+          required
+        />
+      </div>
+
+      <div className="space-y-2">
+        <Label htmlFor="codePostal">Code Postal</Label>
+        <Input
+          id="codePostal"
+          name="codePostal"
+          value={formData.codePostal}
+          onChange={handleInputChange}
+          required
+        />
+      </div>
+
+      <div className="space-y-2">
+        <Label htmlFor="dateNaissance">Date de Naissance</Label>
+        <Input
+          id="dateNaissance"
+          name="dateNaissance"
+          type="date"
+          value={formData.dateNaissance}
+          onChange={handleInputChange}
+          required
+        />
+      </div>
+
+      <div className="space-y-2">
+        <Label htmlFor="citoyennete">Citoyenneté</Label>
+        <Input
+          id="citoyennete"
+          name="citoyennete"
+          value={formData.citoyennete}
+          onChange={handleInputChange}
+          required
+        />
+      </div>
+
+      <div className="space-y-2">
+        <Label htmlFor="permisConduire">Permis de Conduire</Label>
+        <Input
+          id="permisConduire"
+          name="permisConduire"
+          value={formData.permisConduire}
+          onChange={handleInputChange}
+          placeholder="Numéro de permis ou 'Aucun'"
+        />
+      </div>
+
+      <div className="space-y-2">
+        <Label htmlFor="permisAgentSecurite">Permis d'Agent de Sécurité</Label>
+        <Input
+          id="permisAgentSecurite"
+          name="permisAgentSecurite"
+          value={formData.permisAgentSecurite}
+          onChange={handleInputChange}
+          placeholder="Numéro de permis ou 'Aucun'"
+        />
+      </div>
+
+      <div className="space-y-2">
+        <Label htmlFor="certificatPremiersSoins">Certificat de Premiers Soins</Label>
+        <Input
+          id="certificatPremiersSoins"
+          name="certificatPremiersSoins"
+          value={formData.certificatPremiersSoins}
+          onChange={handleInputChange}
+          placeholder="Numéro de certificat ou 'Aucun'"
+        />
+      </div>
+
+      <div className="space-y-2">
+        <Label htmlFor="disponibilite">Disponibilité</Label>
+        <Select name="disponibilite" onValueChange={(value) => handleInputChange({ target: { name: 'disponibilite', value } })}>
+          <SelectTrigger>
+            <SelectValue placeholder="Sélectionnez votre disponibilité" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="temps-plein">Temps Plein</SelectItem>
+            <SelectItem value="temps-partiel">Temps Partiel</SelectItem>
+            <SelectItem value="fins-de-semaine">Fins de Semaine</SelectItem>
+            <SelectItem value="nuits">Nuits</SelectItem>
+          </SelectContent>
+        </Select>
+      </div>
+
+      <div className="space-y-2">
+        <Label htmlFor="experience">Expérience</Label>
+        <Textarea
+          id="experience"
+          name="experience"
+          value={formData.experience}
+          onChange={handleInputChange}
+          placeholder="Décrivez votre expérience pertinente"
+        />
+      </div>
+
+      <div className="space-y-2">
+        <Label htmlFor="education">Éducation</Label>
+        <Textarea
+          id="education"
+          name="education"
+          value={formData.education}
+          onChange={handleInputChange}
+          placeholder="Listez votre parcours éducatif"
+        />
+      </div>
+
+      <div className="space-y-2">
+        <Label htmlFor="commentEntenduParler">Comment avez-vous entendu parler de nous ?</Label>
+        <Input
+          id="commentEntenduParler"
+          name="commentEntenduParler"
+          value={formData.commentEntenduParler}
+          onChange={handleInputChange}
+        />
+      </div>
+
+      <div className="flex items-center space-x-2">
+        <Checkbox
+          id="accepterConditions"
+          name="accepterConditions"
+          checked={formData.accepterConditions}
+          onCheckedChange={(checked) => handleCheckboxChange({ target: { name: 'accepterConditions', checked } })}
+        />
+        <Label htmlFor="accepterConditions">
+          J'accepte les termes et conditions
+        </Label>
+      </div>
+
+      <Button type="submit" className="w-full">Soumettre la Candidature</Button>
+    </form>
+  )
+}
